@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرائد للكراء والبيع</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* أنماط التحميل */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #1a4f8b, #3a7cce);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #f9c80e;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* إخفاء التحميل عند اكتمال التحميل */
+        .loaded #loading {
+            display: none;
+        }
+        
+        :root {
+            --primary-blue: #1a4f8b;
+            --secondary-blue: #3a7cce;
+            --accent-yellow: #f9c80e;
+            --light-yellow: #fce588;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--white);
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+        
+        /* التصميم العام */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* الهيدر */
+        header {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            margin-right: 10px;
+        }
+        
+        .logo span {
+            color: var(--accent-yellow);
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .contact-info a {
+            color: var(--white);
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+        
+        .contact-info a:hover {
+            color: var(--accent-yellow);
+        }
+        
+        /* القائمة */
+        nav {
+            background-color: var(--secondary-blue);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+        }
+        
+        nav ul li {
+            padding: 15px 0;
+        }
+        
+        nav ul li a {
+            color: var(--white);
+            text-decoration: none;
+            padding: 15px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            background-color: var(--primary-blue);
+            color: var(--accent-yellow);
+        }
+        
+        /* السلايدر */
+        .hero {
+            background: linear-gradient(rgba(26, 79, 139, 0.8), rgba(26, 79, 139, 0.8));
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            text-align: center;
+            padding: 5rem 1rem;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-yellow);
+            color: var(--primary-blue);
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: var(--light-yellow);
+            transform: translateY(-3px);
+        }
+        
+        /* الأقسام */
+        section {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-blue);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-yellow);
+            margin: 10px auto;
+        }
+        
+        /* قسم العروض */
+        .offers {
+            background-color: var(--light-gray);
+        }
+        
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .offer-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .offer-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .offer-img {
+            height: 200px;
+            background: var(--secondary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .offer-details {
+            padding: 20px;
+        }
+        
+        .offer-details h3 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+        
+        .offer-details p {
+            margin-bottom: 15px;
+            color: var(--dark-gray);
+        }
+        
+        .price {
+            color: var(--primary-blue);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* قسم التعليقات */
+        .testimonials {
+            background-color: var(--white);
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .testimonial-card {
+            background-color: var(--light-gray);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        
+        .testimonial-author {
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+        
+        /* قسم الحجز */
+        .booking {
+            background-color: var(--light-gray);
+        }
+        
+        .booking-form {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        /* قسم الخريطة */
+        .map {
+            background-color: var(--white);
+        }
+        
+        .map-container {
+            height: 400px;
+            background-color: #eee;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        /* الفوتر */
+        footer {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            color: var(--accent-yellow);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .footer-section p, 
+        .footer-section a {
+            margin-bottom: 10px;
+            display: block;
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        .footer-section a:hover {
+            color: var(--accent-yellow);
+        }
+        
+        .social-icons a {
+            display: inline-block;
+            margin-right: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* responsive design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+                justify-content: center;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- شاشة التحميل -->
+    <div id="loading">
+        <div class="loader"></div>
+        <h2>جاري تحميل موقع الرائد للكراء والبيع</h2>
+        <p>يرجى الانتظار...</p>
+    </div>
+
+    <!-- الهيدر -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <h1>الرائد <span>للكراء والبيع</span></h1>
+            </div>
+            <div class="contact-info">
+                <a href="tel:+213796053879"><i class="fas fa-phone"></i> +213796053879</a>
+                <a href="mailto:location-raid09000@gmail.com"><i class="fas fa-envelope"></i> location-raid09000@gmail.com</a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- القائمة -->
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#home">الرئيسية</a></li>
+                <li><a href="#offers">عروض الكراء</a></li>
+                <li><a href="#testimonials">التعليقات</a></li>
+                <li><a href="#booking">الحجز</a></li>
+                <li><a href="#contact">اتصل بنا</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- السلايدر -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>اكتشف أفضل العروض العقارية في البليدة</h2>
+            <p>نقدم لكم مجموعة مختارة من أفضل الشقق والعقارات للكراء والبيع في البليدة والمناطق المحيطة بها</p>
+            <a href="#offers" class="btn">استعرض العروض</a>
+        </div>
+    </section>
+    
+    <!-- قسم العروض -->
+    <section class="offers" id="offers">
+        <div class="container">
+            <h2 class="section-title">عروض الكراء والبيع</h2>
+            <div class="offers-grid">
+                <!-- عرض 1 -->
+                <div class="offer-card">
+                    <div class="offer-img">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="offer-details">
+                        <h3>شقة فاخرة للكراء</h3>
+                        <p>شقة 3 غرف في المدينة الجديدة بوعينان، طابق 5، مساحة 100م²، مطلة على الحدائق.</p>
+                        <p class="price">25,000 دج/شهر</p>
+                    </div>
+                </div>
+                
+                <!-- عرض 2 -->
+                <div class="offer-card">
+                    <div class="offer-img">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="offer-details">
+                        <h3>شقة للبيع</h3>
+                        <p>شقة جديدة 4 غرف في حي 4500 مسكن، طابق 2، مساحة 120م²، مرآب شامل.</p>
+                        <p class="price">12,500,000 دج</p>
+                    </div>
+                </div>
+                
+                <!-- عرض 3 -->
+                <div class="offer-card">
+                    <div class="offer-img">
+                        <i class="fas fa-house-user"></i>
+                    </div>
+                    <div class="offer-details">
+                        <h3>فيلا للكراء</h3>
+                        <p>فيلا فاخرة 5 غرف في منطقة هادئة، حديقة خاصة، مساحة 200م²، متوفرة الآن.</p>
+                        <p class="price">60,000 دج/شهر</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- قسم التعليقات -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2 class="section-title">تعليقات الزبائن</h2>
+            <div class="testimonials-grid">
+                <!-- تعليق 1 -->
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"تعاملت مع الرائد للكراء والبيع وكانت تجربة رائعة، فريق محترم وخدمة ممتازة. أوصي الجميع بالتعامل معهم."</p>
+                    <p class="testimonial-author">- زبون سابق</p>
+                </div>
+                
+                <!-- تعليق 2 -->
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"وجدت الشقة المناسبة بسرعة قياسية بفضل محترفية فريق العمل، شكراً لكم على المساعدة والجودة في الخدمة."</p>
+                    <p class="testimonial-author">- زبون سابق</p>
+                </div>
+                
+                <!-- تعليق 3 -->
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"خدمة ممتازة وأسعار مناسبة، فريق العمل كان متعاوناً وساعدني في إيجاد ما أبحث عنه في وقت قياسي."</p>
+                    <p class="testimonial-author">- زبون سابق</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- قسم الحجز -->
+    <section class="booking" id="booking">
+        <div class="container">
+            <h2 class="section-title">نموذج الحجز</h2>
+            <div class="booking-form">
+                <form id="reservationForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">الاسم</label>
+                            <input type="text" id="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">اللقب</label>
+                            <input type="text" id="lastName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">الهاتف</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="state">الولاية</label>
+                            <input type="text" id="state" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="municipality">البلدية</label>
+                            <input type="text" id="municipality" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="district">الحي</label>
+                        <input type="text" id="district" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="interest">نوع الخدمة المطلوبة</label>
+                        <select id="interest" required>
+                            <option value="">اختر الخدمة</option>
+                            <option value="rent">كراء</option>
+                            <option value="buy">بيع</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn">إرسال الطلب</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- قسم الخريطة -->
+    <section class="map">
+        <div class="container">
+            <h2 class="section-title">موقعنا</h2>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d102255.4540169991!2d2.912735601124202!3d36.47559950327415!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128e4fcf9b79789d%3A0x9288ac238e0beb3c!2sBlida!5e0!3m2!1sen!2sdz!4v1684324299563!5m2!1sen!2sdz" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+    
+    <!-- الفوتر -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>عن الشركة</h3>
+                    <p>الرائد للكراء والبيع شركة متخصصة في الوساطة العقارية في البليدة والمناطق المحيطة بها، نقدم خدماتنا منذ أكثر من 10 سنوات.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>اتصل بنا</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> العنوان: المدينة الجديدة بوعينان 4500 مسكن البليدة</p>
+                    <p><i class="fas fa-phone"></i> الهاتف: +213796053879</p>
+                    <p><i class="fas fa-envelope"></i> البريد: location-raid09000@gmail.com</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>تابعنا على</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>جميع الحقوق محفوظة &copy; 2023 الرائد للكراء والبيع</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // إخفاء شاشة التحميل عند اكتمال تحميل الصفحة
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+            
+            // هنا يمكن إضافة أكواد JavaScript إضافية
+            console.log('تم تحميل الموقع بنجاح');
+            
+            // التحقق من نموذج الحجز
+            const form = document.getElementById('reservationForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // هنا يمكنك إضافة كود إرسال البيانات إلى الخادم
+                    alert('شكراً لك! تم استلام طلبك وسنتصل بك قريباً.');
+                    form.reset();
+                });
+            }
+            
+            // إضافة تأثيرات للتمرير السلس
+            document.querySelectorAll('nav a').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 70,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+
+        // إذا استغرقت الصفحة أكثر من 8 ثوانٍ في التحميل، قم بإخفاء شاشة التحميل تلقائيًا
+        setTimeout(function() {
+            document.body.classList.add('loaded');
+        }, 8000);
+    </script>
+</body>
+</html>
