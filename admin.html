@@ -480,3 +480,77 @@
     دخول إلى لوحة التحكم
 </a>
 </html>
+// عند تحميل الصفحة، تهيئة البيانات
+initializeData();
+
+// معالجة إضافة إعلان جديد
+document.getElementById('addPropertyForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const property = {
+        title: document.getElementById('property-title').value,
+        type: document.getElementById('property-type').value,
+        operation: document.getElementById('operation-type').value,
+        price: document.getElementById('price').value,
+        location: document.getElementById('location').value,
+        description: document.getElementById('description').value
+    };
+    
+    addProperty(property);
+    alert('تم إضافة الإعلان بنجاح!');
+    this.reset();
+    
+    // تحديث قائمة العقارات
+    refreshPropertiesList();
+});
+
+// تحديث قائمة العقارات
+function refreshPropertiesList() {
+    const properties = getProperties();
+    const tbody = document.querySelector('#manage-properties table tbody');
+    
+    if (properties.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">لا توجد إعلانات</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = properties.map(property => `
+        <tr>
+            <td>${property.title}</td>
+            <td>${property.type}</td>
+            <td>${property.operation === 'بيع' ? property.price + ' دج' : property.price + ' دج/شهر'}</td>
+            <td>${property.location}</td>
+            <td>
+                <button class="btn" style="padding: 5px 10px; font-size: 14px;">تعديل</button>
+                <button class="btn" style="padding: 5px 10px; font-size: 14px; background: #dc3545;">حذف</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// تحديث قائمة الطلبات
+function refreshRequestsList() {
+    const requests = getRequests();
+    const tbody = document.querySelector('#view-requests table tbody');
+    
+    if (requests.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">لا توجد طلبات</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = requests.map(request => `
+        <tr>
+            <td>${request.name || 'غير محدد'}</td>
+            <td>${request.phone || 'غير محدد'}</td>
+            <td>${request.service_type || 'غير محدد'}</td>
+            <td>${request.date || 'غير محدد'}</td>
+            <td>${request.status || 'جديد'}</td>
+        </tr>
+    `).join('');
+}
+
+// عند تحميل الصفحة، عرض البيانات
+document.addEventListener('DOMContentLoaded', function() {
+    refreshPropertiesList();
+    refreshRequestsList();
+});
